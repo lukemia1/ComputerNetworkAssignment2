@@ -220,21 +220,20 @@ void A_input(struct pkt packet)
 }
 
 /* called when A's timer goes off */
+/*Change timer implementation so that is follos SR behaviour*/
 void A_timerinterrupt(void)
 {
-  int i;
-
   if (TRACE > 0)
     printf("----A: time out,resend packets!\n");
 
-  for(i=0; i<windowcount; i++) {
+  if((buffer[windowfirst]).seqnum != -1) {
 
     if (TRACE > 0)
-      printf ("---A: resending packet %d\n", (buffer[(windowfirst+i) % WINDOWSIZE]).seqnum);
+      printf ("---A: resending packet %d\n", (buffer[windowfirst]).seqnum);
 
-    tolayer3(A,buffer[(windowfirst+i) % WINDOWSIZE]);
+    tolayer3(A,buffer[(windowfirst) ]);
     packets_resent++;
-    if (i==0) starttimer(A,RTT);
+    starttimer(A,RTT);
   }
 }       
 
@@ -252,12 +251,16 @@ void A_init(void)
 		     so initially this is set to -1
 		   */
   windowcount = 0;
+  resackcount=0;
+  lastACK=-1;
 }
 
 
 
 /********* Receiver (B)  variables and procedures ************/
 
+static int revbuffer[SEQSPACE]; /*create an array for storing packets sent to application*/
+static int firstr;
 static int expectedseqnum; /* the sequence number expected next by the receiver */
 static int B_nextseqnum;   /* the sequence number for the next packets sent by B */
 
@@ -268,50 +271,76 @@ void B_input(struct pkt packet)
   struct pkt sendpkt;
   int i;
 
+  /*check if this is the first time the receiver is running*/
+    if(firstr==0)
+    {
+        for(i=0;i<SEQSPACE;i++)
+        {
+            /*Each entry set to -1 meaning no packet received*/
+            revbuffer[i]=-1;
+        }
+        /*set flag ensuring initialization does not run again*/
+        firstr= 1;
+    }
+
+    
+
+
+
+
   /* if not corrupted and received packet is in order */
-  if  ( (!IsCorrupted(packet))  && (packet.seqnum == expectedseqnum) ) {
+  if  ( (!IsCorrupted(packet))) 
+  {
+    int data_existed=0;
     if (TRACE > 0)
       printf("----B: packet %d is correctly received, send ACK!\n",packet.seqnum);
     packets_received++;
 
-    /* deliver to receiving application */
-    tolayer5(B, packet.payload);
+    for (i = 0; i < SEQSPACE; i++)
+    {
+        if(revbuffer[i]==packet.seqnum)
+        {
+            data_existed=1;
+            break;
+        }
+    }
+
+    if(data_existed==0)
+    {
+        revbuffer[expectedseqnum]=packet.seqnum;
+        if(expectedseqnum<SEQSPACE)
+        {
+            expectedseqnum+=1;
+        }
+        tolayer5(B, packet.payload);
+    }
 
     /* send an ACK for the received packet */
-    sendpkt.acknum = expectedseqnum;
+    sendpkt.acknum = packet.seqnum;
 
-    /* update state variables */
-    expectedseqnum = (expectedseqnum + 1) % SEQSPACE;        
+       
+
+    /* create packet */
+    sendpkt.seqnum = B_nextseqnum;
+    B_nextseqnum = (B_nextseqnum + 1) % 2;
+        
+    /* we don't have any data to send.  fill payload with 0's */
+    for ( i=0; i<20 ; i++ ) 
+        sendpkt.payload[i] = '0';  
+
+    /* computer checksum */
+    sendpkt.checksum = ComputeChecksum(sendpkt); 
+
+    /* send out packet */
+    tolayer3 (B, sendpkt);
   }
-  else {
-    /* packet is corrupted or out of order resend last ACK */
-    if (TRACE > 0) 
-      printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
-    if (expectedseqnum == 0)
-      sendpkt.acknum = SEQSPACE - 1;
-    else
-      sendpkt.acknum = expectedseqnum - 1;
-  }
-
-  /* create packet */
-  sendpkt.seqnum = B_nextseqnum;
-  B_nextseqnum = (B_nextseqnum + 1) % 2;
-    
-  /* we don't have any data to send.  fill payload with 0's */
-  for ( i=0; i<20 ; i++ ) 
-    sendpkt.payload[i] = '0';  
-
-  /* computer checksum */
-  sendpkt.checksum = ComputeChecksum(sendpkt); 
-
-  /* send out packet */
-  tolayer3 (B, sendpkt);
 }
 
 /* the following routine will be called once (only) before any other */
 /* entity B routines are called. You can use it to do any initialization */
 void B_init(void)
 {
+  firstr=0;
   expectedseqnum = 0;
   B_nextseqnum = 1;
 }
