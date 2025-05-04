@@ -235,7 +235,7 @@ void A_timerinterrupt(void)
 
     tolayer3(A,buffer[(windowfirst)]);
     packets_resent++;
-    starttimer(A,RTT+1);
+    starttimer(A,RTT);
   }
 }       
 
