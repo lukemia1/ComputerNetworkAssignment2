@@ -77,7 +77,7 @@ void A_output(struct msg message)
 
     /* start timer if first packet in window */
     if (windowcount == 1) 
-      starttimer(A,RTT);
+      starttimer(A,RTT+1);
 
     /* get next sequence number, wrap back to 0 */
     A_nextseqnum = (A_nextseqnum + 1) % SEQSPACE;  
