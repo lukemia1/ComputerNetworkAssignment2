@@ -1,0 +1,95 @@
+commit 966fdcf23b5fb885530f4a6b403b491a0d8e134c
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Sun May 4 15:44:35 2025 +0930
+
+    Conditions changed
+
+    Tried to change conditions to get compilation to work unsure why BIDIRECTIONAL is saying it's not defined when it is
+
+commit 445f461531f611c2a6639c868e57f1b43b5cd3a5
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Sun May 4 15:08:54 2025 +0930
+
+    Makefile
+
+    Makefile for defining BIDIRECTIONAL because I'm still getting compilation errors on gradescope
+
+commit f2862bec49136b1bb8f99ae38df901ebfefa92e8
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Sun May 4 15:03:20 2025 +0930
+
+    Defined BIDIRECTIONal
+
+    for this practical the messages can only be sent one way so defined BIDIRECTIONAL 0
+
+commit 681f1192cd774b09029e0a529d0dd9b27c255f6e
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Sun May 4 14:55:13 2025 +0930
+
+    Add files via upload
+
+commit 7ffe64cca3f503b108e42edb7985bff566e4db2f
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Fri May 2 17:43:32 2025 +0930
+
+    Added include "sr.h" in header
+
+commit 0ac780a725b09495995e154a75f2c3eab23a1965
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Fri May 2 17:36:51 2025 +0930
+
+    Added behavior for receiver
+
+    Created variables for storing packets sent to application and an array of indexes of the first received data.
+
+    Implemented the initialization to only occur once
+
+commit 3722dec7c624c09a9c939d98e57edce57d7dab1a
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Fri May 2 17:14:59 2025 +0930
+
+    Got rid of emulator files
+
+    Do not need emulator files in this as when submitting the web has it's own emulator. Couldn't figure out how to delete files off a branch so had to create a new repository.
+
+commit e99053d1922aac7902ea41e507d8ee8fae5863bc
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Fri May 2 17:13:41 2025 +0930
+
+    Initial commit
+    Merge pull request #2 from lukemia1/Assignment-2-2
+
+    Assignment 2 2
+
+commit 3896caaa8fad0ffcf3ce9a36f8bf0692f6d97976
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Fri May 2 17:05:53 2025 +0930
+
+    Added acknowledgement implementation
+
+    Changed acknowledgement from cumulative acknowledgement found in GBN to individual packet acknowledgement that SR should provide in behavior
+
+commit 5a06d4c22ee7f772a2300215bdefa16ef95f5573
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Fri May 2 16:52:54 2025 +0930
+
+    Created Variables
+
+    Variables to track packets and acknowledgements were created to implement SB functions
+
+commit da5b8c6d6b078646e8ceacb559315833470cfd80
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Fri May 2 16:43:02 2025 +0930
+
+    Created sr.c and sr.h files.
+
+    Also changed SEQSPACE size to follow the expected behavior
+
+commit b5c3134dd1ddfa7b4b49b9164ea75de84ab08d3e
+Merge: cc5b601 46f92b4
+Author: lukemia1 <109942516+lukemia1@users.noreply.github.com>
+Date:   Fri May 2 16:09:10 2025 +0930
+
+    Merge pull request #1 from lukemia1/Assignment-2-1
+
+    Initial Files to track changes
