@@ -1,3 +1,4 @@
+#define BIDIRECTIONAL 0
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
