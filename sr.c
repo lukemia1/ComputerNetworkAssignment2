@@ -77,7 +77,7 @@ void A_output(struct msg message)
 
     /* start timer if first packet in window */
     if (windowcount == 1) 
-      starttimer(A,RTT+1);
+      starttimer(A,RTT);
 
     /* get next sequence number, wrap back to 0 */
     A_nextseqnum = (A_nextseqnum + 1) % SEQSPACE;  
@@ -174,7 +174,7 @@ void A_input(struct pkt packet)
               stoptimer(A);
               if (windowcount > 0)
               {
-                starttimer(A, RTT);
+                starttimer(A, RTT+1);
               }           
             }        
             
@@ -205,7 +205,7 @@ void A_timerinterrupt(void)
     /* only rsend the windowfirst pkt */
     tolayer3(A,buffer[windowfirst]);
     packets_resent++;
-    starttimer(A,RTT);
+    starttimer(A,RTT+1);
   }
     
 }
