@@ -4,7 +4,7 @@
 #include "emulator.h"
 #include "sr.h"
 
-#define RTT  15.0       /* round trip time.  MUST BE SET TO 15.0 when submitting assignment */
+#define RTT  16.0       /* round trip time.  MUST BE SET TO 16.0 when submitting assignment */
 #define WINDOWSIZE 6    /* Maximum number of buffered unacked packet */
 #define SEQSPACE 12      /* min sequence space for SR must be at least windowsize * 2  */
 #define NOTINUSE (-1)   /* used to fill header fields that are not being used */
@@ -77,7 +77,7 @@ void A_output(struct msg message)
 
     /* start timer if first packet in window */
     if (windowcount == 1) 
-      starttimer(A,RTT+1);
+      starttimer(A,RTT);
 
     /* get next sequence number, wrap back to 0 */
     A_nextseqnum = (A_nextseqnum + 1) % SEQSPACE;  
@@ -174,7 +174,7 @@ void A_input(struct pkt packet)
               stoptimer(A);
               if (windowcount > 0)
               {
-                starttimer(A, RTT+1);
+                starttimer(A, RTT);
               }           
             }        
             
@@ -205,7 +205,7 @@ void A_timerinterrupt(void)
     /* only rsend the windowfirst pkt */
     tolayer3(A,buffer[windowfirst]);
     packets_resent++;
-    starttimer(A,RTT+1);
+    starttimer(A,RTT);
   }
     
 }
